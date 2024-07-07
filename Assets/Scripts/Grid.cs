@@ -5,31 +5,37 @@ using UnityEngine;
 
 public class Grid
 {
-    private int width;
-    private int height;
+    public int width;
+    public int height;
     private float cellSize;
-    private int[,] gridArray;
-    
+    private GameObject[,] gridArray;
+    public bool isdebug;
 
     public Grid(int width, int height, float cellSize)
     {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
-        gridArray = new int[width, height];
+        gridArray = new GameObject[width, height];
 
-        for(int x = 0; x < gridArray.GetLength(0); x++)
+        for (int x = 0; x < gridArray.GetLength(0); x++)
         {
-            for(int y = 0; y < gridArray.GetLength(1); y++)
+            for (int y = 0; y < gridArray.GetLength(1); y++)
             {
                 var position = GetWorldPosition(x, y);
-                VisualizeCell(position);
+                if (isdebug)
+                {
+                    VisualizeCell(position);
+                }
+
             }
         }
-    }   
+    }
 
     public void VisualizeCell(Vector3 position)
     {
+
+
         GameObject gameObject = new GameObject($"Grid cell: {position.x},{position.y}");
         gameObject.transform.localPosition = position;
         gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
@@ -43,8 +49,17 @@ public class Grid
 
     }
 
+    public void AddToGrid(GameObject cellObject, int x, int y)
+    {
+        Vector3 position = GetWorldPosition(x, y);
+        cellObject.transform.localPosition = position;
+        gridArray[x,y]=cellObject;
+    }
+
+
+
     private Vector3 GetWorldPosition(int x, int y)
     {
-        return new Vector3(x, y) * cellSize;
+        return new Vector3(x, 0, y) * cellSize;
     }
 }
